@@ -6,11 +6,25 @@ import (
 	"fmt"
 	"iter"
 	"os"
+	"strconv"
+	"strings"
 )
 
 type Puzzle struct {
 	Year int
 	Day int
+}
+
+func NewPuzzle() Puzzle {
+	r := bufio.NewReader(os.Stdin)
+	fmt.Println("Enter the day: ")
+	day_str, err := r.ReadString('\n'); if err != nil {
+		panic("Can't read day")
+	}
+	day, err := strconv.Atoi(strings.TrimSuffix(day_str, "\n")); if err != nil {
+		panic("Can't convert day to int")
+	}
+	return Puzzle {2024, day}
 }
 
 type InputType int

@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	puzzle_input := reader.NewPuzzleInput(2024, 0, reader.Real)
+	puzzle := reader.NewPuzzle()
+	puzzle_input := reader.NewPuzzleInput(puzzle.Year, puzzle.Day, reader.Real)
 	for line := range puzzle_input.Lines() {
 		fmt.Println(line)
 	}
