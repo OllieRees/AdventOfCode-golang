@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"iter"
 	"os"
 )
 
@@ -60,19 +61,21 @@ func (input PuzzleInput) file() (file *os.File, err error) {
 	return f, nil
 }
 
-func (input PuzzleInput) Read(b []byte) (n int, err error) {
-	f, err := input.file()
-	if err != nil {
-		return 0, err
-	}
-	defer f.Close()
-	return f.Read(b)
-}
-
-func (input PuzzleInput) FileScanner() (r *bufio.Scanner, err error) {
+func (input PuzzleInput) fileScanner() (r *bufio.Scanner, err error) {
 	f, err := input.file()
 	if err != nil {
 		return nil, err
 	}
 	return bufio.NewScanner(f), nil
+}
+
+func (input PuzzleInput) Lines() iter.Seq[string] {
+	s, _ := input.fileScanner()
+	return func(yield func(string) bool) {
+		for s.Scan() {
+			if !yield(s.Text()) {
+				return
+			}
+		}
+	}
 }

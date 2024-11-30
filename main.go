@@ -8,8 +8,7 @@ import (
 
 func main() {
 	puzzle_input := reader.NewPuzzleInput(2024, 0, reader.Real)
-	r, _ := puzzle_input.FileScanner()
-	for r.Scan() {
-		fmt.Println(r.Text())
+	for line := range puzzle_input.Lines() {
+		fmt.Println(line)
 	}
 }
