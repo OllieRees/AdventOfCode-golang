@@ -12,7 +12,4 @@ func main() {
 	for r.Scan() {
 		fmt.Println(r.Text())
 	}
-	if r.Err() != nil {
-		fmt.Println("END")
-	}
 }
