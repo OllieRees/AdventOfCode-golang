@@ -17,7 +17,7 @@ type Puzzle struct {
 
 func NewPuzzle() Puzzle {
 	r := bufio.NewReader(os.Stdin)
-	fmt.Println("Enter the day: ")
+	fmt.Print("Enter the day: ")
 	day_str, err := r.ReadString('\n'); if err != nil {
 		panic("Can't read day")
 	}
@@ -27,12 +27,31 @@ func NewPuzzle() Puzzle {
 	return Puzzle {2024, day}
 }
 
+func (puzzle Puzzle) Run(input_type InputType) {
+	puzzle_input := NewPuzzleInput(puzzle.Year, puzzle.Day, input_type)
+	fmt.Println(puzzle_input)
+	for line := range puzzle_input.Lines() {
+		fmt.Println(line)
+	}
+}
+
 type InputType int
 
 const (
 	Practice InputType = iota + 1
 	Real
 )
+
+func (input InputType) String() string {
+	switch input {
+	case Practice:
+		return "Practice"
+	case Real:
+		return "Real"
+	default:
+		return ""
+	}
+}
 
 func (input InputType) filename() (string, error) {
 	switch input {
@@ -52,6 +71,10 @@ type PuzzleInput struct {
 
 func NewPuzzleInput(year int, day int, input_type InputType) PuzzleInput {
 	return PuzzleInput { Puzzle: Puzzle {Year: year, Day: day}, Type: input_type }
+}
+
+func (input PuzzleInput) String() string {
+	return fmt.Sprintf("%s Puzzle for Year %d and Day %d", input.Type, input.Puzzle.Year, input.Puzzle.Day)
 }
 
 func (input PuzzleInput) filepath() (string, error) {
