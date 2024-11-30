@@ -67,6 +67,7 @@ func (input InputType) filename() (string, error) {
 type PuzzleInput struct {
 	Puzzle Puzzle
 	Type InputType
+	File *os.File `default:"nil"`
 }
 
 func NewPuzzleInput(year int, day int, input_type InputType) PuzzleInput {
@@ -95,7 +96,8 @@ func (input PuzzleInput) file() (file *os.File, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return f, nil
+	input.File = f
+	return f, err
 }
 
 func (input PuzzleInput) fileScanner() (r *bufio.Scanner, err error) {
@@ -111,6 +113,7 @@ func (input PuzzleInput) Lines() iter.Seq[string] {
 	return func(yield func(string) bool) {
 		for s.Scan() {
 			if !yield(s.Text()) {
+				input.File.Close()
 				return
 			}
 		}
