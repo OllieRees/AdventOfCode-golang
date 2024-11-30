@@ -35,7 +35,6 @@ type PuzzleInput struct {
 }
 
 func NewPuzzleInput(year int, day int, input_type InputType) PuzzleInput {
-	// puzzle_input := reader.PuzzleInput { Puzzle: reader.Puzzle { Day: 0, Year: 2024 }, Type: reader.Real }
 	return PuzzleInput { Puzzle: Puzzle {Year: year, Day: day}, Type: input_type }
 }
 
@@ -57,6 +56,7 @@ func (input PuzzleInput) Read(b []byte) (n int, err error) {
 	if err != nil {
 		return 0, err
 	}
+	defer f.Close()
 
 	return f.Read(b)
 }
