@@ -1,6 +1,7 @@
 package puzzlereader
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"os"
@@ -46,17 +47,32 @@ func (input PuzzleInput) filepath() (string, error) {
 	return fmt.Sprintf("puzzles/%d/%s", input.Puzzle.Day, filename), nil
 }
 
-func (input PuzzleInput) Read(b []byte) (n int, err error) {
+func (input PuzzleInput) file() (file *os.File, err error) {
 	filepath, err := input.filepath()
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
     f, err := os.Open(filepath)
 	if err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
+func (input PuzzleInput) Read(b []byte) (n int, err error) {
+	f, err := input.file()
+	if err != nil {
 		return 0, err
 	}
 	defer f.Close()
-
 	return f.Read(b)
+}
+
+func (input PuzzleInput) FileScanner() (r *bufio.Scanner, err error) {
+	f, err := input.file()
+	if err != nil {
+		return nil, err
+	}
+	return bufio.NewScanner(f), nil
 }
