@@ -8,6 +8,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+
+	puzzles "github.com/OllieRees/AdventOfCode/puzzles"
 )
 
 type Puzzle struct {
@@ -27,12 +30,24 @@ func NewPuzzle() Puzzle {
 	return Puzzle {2024, day}
 }
 
+func (puzzle Puzzle) puzzleRoutine() func(iter.Seq[string]) {
+	switch puzzle.Year {
+	case 2024:
+		switch puzzle.Day {
+		case 0:
+			return puzzles.Test
+		default:
+			panic(fmt.Sprintf("Can't find puzzle for year %s and day %s", puzzle.Year, puzzle.Day))
+		}
+	default:
+		panic(fmt.Sprintf("Can't find puzzle for year %s", puzzle.Year))
+	}
+}
+
 func (puzzle Puzzle) Run(input_type InputType) {
 	puzzle_input := NewPuzzleInput(puzzle.Year, puzzle.Day, input_type)
 	fmt.Println(puzzle_input)
-	for line := range puzzle_input.Lines() {
-		fmt.Println(line)
-	}
+	puzzle.puzzleRoutine()(puzzle_input.Lines())
 }
 
 type InputType int
@@ -83,7 +98,7 @@ func (input PuzzleInput) filepath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("puzzles/%d/%s", input.Puzzle.Day, filename), nil
+	return fmt.Sprintf("input/%d/%s", input.Puzzle.Day, filename), nil
 }
 
 func (input PuzzleInput) file() (file *os.File, err error) {
