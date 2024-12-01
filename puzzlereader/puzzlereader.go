@@ -36,6 +36,8 @@ func (puzzle Puzzle) puzzleRoutine() func(iter.Seq[string]) {
 		switch puzzle.Day {
 		case 0:
 			return puzzles.Test
+		case 1:
+			return puzzles.HistorianHysteria
 		default:
 			panic(fmt.Sprintf("Can't find puzzle for year %s and day %s", puzzle.Year, puzzle.Day))
 		}
